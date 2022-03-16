@@ -1,0 +1,1 @@
+CIBW_BUILD=cp311-* CIBW_SKIP=*musllinux* CIBW_BEFORE_ALL="bash build_snappy.sh" CIBW_BEFORE_ALL_LINUX="yum install -y snappy-devel" CIBW_BEFORE_ALL_MACOS="brew install snappy" CIBW_ARCHS_MACOS="auto" pipx run cibuildwheel --output-dir dist

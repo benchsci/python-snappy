@@ -24,14 +24,15 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import sys
+
 try:
-    from setuptools import setup, Extension
+    from setuptools import Extension, setup
 except ImportError:
     from distutils.core import setup, Extension
 
 import os
 
-version = '0.6.1'
+version = "0.6.1"
 long_description = """
 Python bindings for the snappy compression library from Google.
 
@@ -39,64 +40,73 @@ More details about Snappy library: http://google.github.io/snappy
 """
 
 library_dirs, include_dirs = [], []
-if os.environ.get("CIBUILDWHEEL", False) and sys.version_info[:2] == (3, 9) and sys.platform =="darwin":
+if (
+    os.environ.get("CIBUILDWHEEL", False)
+    and sys.version_info[:2] == (3, 9)
+    and sys.platform == "darwin"
+):
     library_dirs = ["/usr/local/lib/"]
     include_dirs = ["/usr/local/include/"]
 
 
-snappymodule = Extension('snappy._snappy',
-                         libraries=['snappy'],
-                         sources=['src/snappy/snappymodule.cc', 'src/snappy/crc32c.c'],
-                         library_dirs=library_dirs,
-                         include_dirs=include_dirs)
+snappymodule = Extension(
+    "snappy._snappy",
+    libraries=["snappy"],
+    sources=["src/snappy/snappymodule.cc", "src/snappy/crc32c.c"],
+    library_dirs=library_dirs,
+    include_dirs=include_dirs,
+)
 
 ext_modules = [snappymodule]
-packages = ['snappy']
+packages = ["snappy"]
 install_requires = []
 setup_requires = []
 cffi_modules = []
 
-if 'PyPy' in sys.version:
+if "PyPy" in sys.version:
     from setuptools import setup
+
     ext_modules = []
-    install_requires = ['cffi>=1.15.0']
-    setup_requires = ['cffi>=1.15.0']
-    cffi_modules = ['./src/snappy/snappy_cffi_builder.py:ffi']
+    install_requires = ["cffi>=1.15.0"]
+    setup_requires = ["cffi>=1.15.0"]
+    cffi_modules = ["./src/snappy/snappy_cffi_builder.py:ffi"]
 
 setup(
-    name='python-snappy',
+    name="python-snappy",
     version=version,
-    author='Andres Moreira',
-    author_email='andres@andresmoreira.com',
-    url='http://github.com/andrix/python-snappy',
-    description='Python library for the snappy compression library from Google',
+    author="Andres Moreira",
+    author_email="andres@andresmoreira.com",
+    url="http://github.com/andrix/python-snappy",
+    description="Python library for the snappy compression library from Google",
     long_description=long_description,
-    keywords='snappy, compression, google',
-    license='BSD',
-    classifiers=['Development Status :: 4 - Beta',
-                 'Topic :: Internet',
-                 'Topic :: Software Development',
-                 'Topic :: Software Development :: Libraries',
-                 'Topic :: System :: Archiving :: Compression',
-                 'License :: OSI Approved :: BSD License',
-                 'Intended Audience :: Developers',
-                 'Intended Audience :: System Administrators',
-                 'Operating System :: MacOS :: MacOS X',
-                 # 'Operating System :: Microsoft :: Windows', -- Not tested yet
-                 'Operating System :: POSIX',
-                 'Programming Language :: Python :: 2.7',
-                 'Programming Language :: Python :: 3',
-                 'Programming Language :: Python :: 3.5',
-                 'Programming Language :: Python :: 3.6',
-                 'Programming Language :: Python :: 3.7',
-                 'Programming Language :: Python :: 3.8',
-                 'Programming Language :: Python :: 3.9',
-                 'Programming Language :: Python :: 3.10'
-                 ],
+    keywords="snappy, compression, google",
+    license="BSD",
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Topic :: Internet",
+        "Topic :: Software Development",
+        "Topic :: Software Development :: Libraries",
+        "Topic :: System :: Archiving :: Compression",
+        "License :: OSI Approved :: BSD License",
+        "Intended Audience :: Developers",
+        "Intended Audience :: System Administrators",
+        "Operating System :: MacOS :: MacOS X",
+        # 'Operating System :: Microsoft :: Windows', -- Not tested yet
+        "Operating System :: POSIX",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10"
+        "Programming Language :: Python :: 3.11",
+    ],
     ext_modules=ext_modules,
     packages=packages,
     install_requires=install_requires,
     setup_requires=setup_requires,
     cffi_modules=cffi_modules,
-    package_dir={'': 'src'},
+    package_dir={"": "src"},
 )
